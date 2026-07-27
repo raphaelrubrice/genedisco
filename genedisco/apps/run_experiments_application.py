@@ -102,7 +102,12 @@ class RunExperimentsApplication(sp.AbstractBaseApplication):
     def train_model(self, model: sp.AbstractBaseModel) -> Optional[sp.AbstractBaseModel]:
         acqfunc_path = self.acquisition_function_path
         random_state = np.random.RandomState(self.seed)
-        baselines = ActiveLearningLoop.ACQUISITION_FUNCTIONS
+        baselines = list(ActiveLearningLoop.ACQUISITION_FUNCTIONS)
+        # "custom" requires a user-supplied acquisition function file. Drop it from the
+        # sweep unless a valid --acquisition_function_path was actually provided, otherwise
+        # get_if_valid_acquisition_function_file() hits os.path.exists(None).
+        if not (acqfunc_path and os.path.exists(acqfunc_path)):
+            baselines = [b for b in baselines if b != "custom"]
         random_seeds = random_state.randint(2**31, size=self.num_random_seeds)
         datasets = SingleCycleApplication.DATASET_NAMES[1:]  # Excluding Shifrut et al.
         feature_sets = SingleCycleApplication.FEATURE_SET_NAMES
