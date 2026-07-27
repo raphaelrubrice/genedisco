@@ -79,7 +79,9 @@ class PlotApplication:
                                  f"{self.batch_size}_"
                                  f"{self.metric_name}.pdf"))
 
+def main():
+    plot_application = sp.instantiate_from_command_line(PlotApplication)
+    plot_application.run()
 
 if __name__ == "__main__":
-    app = sp.instantiate_from_command_line(PlotApplication)
-    app.run()
+    main()
