@@ -22,8 +22,9 @@ from slingpy.utils.logging import warn
 
 
 class HGNCNames(object):
-    FILE_URL = "http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/tsv/locus_types/gene_with_protein_product.txt"
-
+    # OLD FILE_URL = "http://ftp.ebi.ac.uk/pub/databases/genenames/hgnc/tsv/locus_types/gene_with_protein_product.txt"
+    FILE_URL = "https://storage.googleapis.com/public-download-files/hgnc/tsv/tsv/locus_types/gene_with_protein_product.txt"
+    
     def __init__(self, cache_directory: AnyStr):
         self.hgnc_mappings = {}
         self.cache_directory = cache_directory
