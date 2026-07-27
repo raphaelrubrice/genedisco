@@ -37,7 +37,9 @@ class HGNCNames(object):
 
     def get_gene_names(self, index_name: AnyStr = "symbol"):
         tsv_file = self.get_hgnc_master_file()
-        data = pd.read_csv(tsv_file, sep="\t", index_col=index_name)
+        
+        # low_memory=False to better handle mixed typed columns in updated HGNC tsv file
+        data = pd.read_csv(tsv_file, sep="\t", index_col=index_name, low_memory=False)
         gene_names = data.index.values.tolist()
         return gene_names
 
