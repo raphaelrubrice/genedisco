@@ -112,6 +112,9 @@ class PlotApplication:
 
             ax.legend()
             plt.xticks([int(xi) for xi in np.arange(max_cycles) * self.batch_size])
+            ax.set_xlabel("Number of acquired samples")
+            ax.set_ylabel(self.metric_name)
+            ax.set_title(f"{self.dataset_name} \u00b7 {self.feature_set_name}")
 
         os.makedirs(self.output_directory, exist_ok=True)
         out_path = os.path.join(self.output_directory,
