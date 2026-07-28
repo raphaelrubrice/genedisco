@@ -71,6 +71,11 @@ class ActiveLearningLoop(sp.AbstractBaseApplication):
         self.acquisition_function_name = acquisition_function_name
         self.acquisition_function_path = acquisition_function_path
         PathTools.mkdir_if_not_exists(output_directory)
+        # The cache directory holds downloaded datasets. It must exist before any
+        # loader runs (prepare_hitratio_evaluation below downloads into it), because
+        # slingpy's download_streamed opens its ILock file with open(path, "w")
+        # without creating the parent directory first.
+        PathTools.mkdir_if_not_exists(cache_directory)
         self.acquisition_function = ActiveLearningLoop.get_acquisition_function(
             self.acquisition_function_name,
             self.acquisition_function_path
