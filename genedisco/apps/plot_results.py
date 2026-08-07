@@ -53,8 +53,8 @@ class PlotApplication:
             )
 
         fig, ax = plt.subplots()
-        # Size the palette to the number of methods actually present, otherwise
-        # clrs[i] raises IndexError as soon as there are more than a handful.
+        # Size the palette to the method count, else clrs[i] IndexErrors when
+        # there are more methods than colors.
         clrs = sns.color_palette("husl", len(acq_dirs))
         with sns.axes_style("darkgrid"):
             methods = defaultdict(dict)
