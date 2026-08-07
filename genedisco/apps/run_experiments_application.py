@@ -107,12 +107,10 @@ class RunExperimentsApplication(sp.AbstractBaseApplication):
 
     @staticmethod
     def _parse_name_selection(raw, valid_names, default_names, kind):
-        """Parse a comma-separated CLI selection, validating against valid_names.
+        """Parse a comma-separated CLI selection against valid_names.
 
-        An empty/blank selection falls back to default_names. Unknown names raise a
-        ValueError listing the valid options so a typo fails fast instead of
-        silently producing an empty sweep. Requested order is preserved and
-        duplicates are dropped.
+        Empty/blank falls back to default_names; unknown names raise ValueError.
+        Order is preserved and duplicates dropped.
         """
         if raw is None or str(raw).strip() == "":
             return list(default_names)
@@ -129,9 +127,8 @@ class RunExperimentsApplication(sp.AbstractBaseApplication):
         acqfunc_path = self.acquisition_function_path
         random_state = np.random.RandomState(self.seed)
         baselines = list(ActiveLearningLoop.ACQUISITION_FUNCTIONS)
-        # "custom" requires a user-supplied acquisition function file. Drop it from the
-        # sweep unless a valid --acquisition_function_path was actually provided, otherwise
-        # get_if_valid_acquisition_function_file() hits os.path.exists(None).
+        # "custom" needs an acquisition function file; drop it unless a valid
+        # --acquisition_function_path was given, else it hits os.path.exists(None).
         if not (acqfunc_path and os.path.exists(acqfunc_path)):
             baselines = [b for b in baselines if b != "custom"]
         random_seeds = random_state.randint(2**31, size=self.num_random_seeds)
