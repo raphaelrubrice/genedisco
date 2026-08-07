@@ -38,9 +38,7 @@ def softmax_temperature(x, temperature=1):
         y = np.array(x)
     else:
         y = x
-    # softmax already applies exp internally; scaling by temperature here yields
-    # exp(x/T) / sum(exp(x/T)) as documented. The previous code exponentiated x
-    # first and then called softmax, i.e. softmax(exp(x/T)), which underflows to a
+    # exp(x/T) / sum(exp(x/T)). Exponentiating before the softmax underflows to a
     # near one-hot distribution and breaks sampling without replacement.
     out_np = scipy.special.softmax(y / temperature)
     if np.any(np.isnan(out_np)):
