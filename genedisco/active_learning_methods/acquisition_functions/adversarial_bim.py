@@ -24,9 +24,8 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 def _get_model_device(last_model):
-    # The torch module is wrapped by slingpy/meta-model layers (last_model.model.model).
-    # Resetting to the best checkpoint can land it on CPU even when a GPU is visible,
-    # so infer the real device from the parameters instead of assuming `device`.
+    # Checkpoint reset can move the model back to CPU, so read the device off its
+    # parameters rather than assuming `device`.
     module = getattr(last_model, "model", last_model)
     module = getattr(module, "model", module)
     try:
