@@ -77,10 +77,8 @@ class ActiveLearningLoop(sp.AbstractBaseApplication):
         # acquisition function (slingpy's CLI parses primitives only).
         self.acquisition_function_kwargs = acquisition_function_kwargs
         PathTools.mkdir_if_not_exists(output_directory)
-        # The cache directory holds downloaded datasets. It must exist before any
-        # loader runs (prepare_hitratio_evaluation below downloads into it), because
-        # slingpy's download_streamed opens its ILock file with open(path, "w")
-        # without creating the parent directory first.
+        # Must exist before any loader downloads into it: slingpy's download_streamed
+        # opens its lock file without creating the parent directory.
         PathTools.mkdir_if_not_exists(cache_directory)
         self.acquisition_function = ActiveLearningLoop.get_acquisition_function(
             self.acquisition_function_name,
@@ -131,11 +129,9 @@ class ActiveLearningLoop(sp.AbstractBaseApplication):
     
     @staticmethod
     def _parse_acquisition_function_kwargs(acquisition_function_kwargs):
-        """Decode the JSON kwargs string threaded through the CLI into a dict.
+        """Decode the CLI's JSON kwargs string into a dict (empty/blank -> {}).
 
-        slingpy's argument parser only handles primitive types, so structured
-        constructor arguments for a custom acquisition function are passed as a
-        JSON object string and decoded here. Empty/blank yields no kwargs.
+        Kwargs come in as JSON because slingpy's CLI only parses primitives.
         """
         if acquisition_function_kwargs is None or str(acquisition_function_kwargs).strip() == "":
             return {}
